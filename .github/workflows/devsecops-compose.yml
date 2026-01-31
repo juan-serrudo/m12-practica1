@@ -37,7 +37,13 @@ jobs:
         npm ci
         npm test
 
-    # 4. Build – Construir imágenes Docker
+    # 4. Build – Limpiar imágenes/caché para evitar capas antiguas
+    - name: Clean docker images and build cache
+      run: |
+        docker image rm -f users-service:latest academic-service:latest api-gateway:latest || true
+        docker builder prune -af || true
+
+    # 4.1. Build – Construir imágenes Docker
     - name: Build images with Docker Compose (clean)
       run: docker compose build --no-cache --pull
 
